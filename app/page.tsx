@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AuroraBackground from "../components/ui/aurora-background";
 import { SplineSceneBasic } from "../components/ui/code.demo";
 import { Button } from "../components/ui/moving-border";

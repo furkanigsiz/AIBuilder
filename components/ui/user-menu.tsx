@@ -6,23 +6,32 @@ import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 
+interface User {
+  email: string;
+  id: string;
+}
+
+interface UserMenuProps {
+  user: User;
+}
+
 export function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     // Kullanıcı durumunu kontrol et
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+      setUser(user as User);
     };
 
     checkUser();
 
     // Auth durumu değişikliklerini dinle
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      setUser(session?.user as User ?? null);
     });
 
     return () => {

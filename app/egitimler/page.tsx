@@ -69,7 +69,7 @@ export default function Egitimler() {
               AI ile Geleceğe Yolculuk
             </h1>
             <p className="text-xl text-neutral-300 max-w-3xl mx-auto mt-2">
-              Yapay zeka dünyasına ilk adımınızı atın. Modern AI teknolojileri ile tanışın ve geleceği şekillendirin.
+              Yapay zeka&apos;nın temellerini öğrenmek için harika bir başlangıç. Modern AI teknolojileri ile tanışın ve geleceği şekillendirin.
             </p>
           </motion.div>
         </div>

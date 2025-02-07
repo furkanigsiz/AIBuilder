@@ -16,10 +16,6 @@ export default function Auth() {
   const [password, setPassword] = useState("");
   const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    checkUser();
-  }, []);
-
   const checkUser = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -34,6 +30,10 @@ export default function Auth() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    checkUser();
+  }, [checkUser]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,12 +67,16 @@ export default function Auth() {
         
         router.push("/kaynaklar");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Auth hatası:', error);
-      if (error.message === 'User already registered') {
-        setError('Bu e-posta adresi zaten kayıtlı');
+      if (error instanceof Error) {
+        if (error.message === 'User already registered') {
+          setError('Bu e-posta adresi zaten kayıtlı');
+        } else {
+          setError(error.message);
+        }
       } else {
-        setError(error.message || 'Bir hata oluştu');
+        setError('Bir hata oluştu');
       }
     } finally {
       setIsLoading(false);

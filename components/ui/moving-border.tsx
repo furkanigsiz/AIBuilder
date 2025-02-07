@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { ReactNode, CSSProperties } from "react";
 import {
   motion,
   useAnimationFrame,
@@ -67,6 +67,15 @@ export function Button({
       </div>
     </Component>
   );
+}
+
+interface MovingBorderProps {
+  children: ReactNode;
+  duration?: number;
+  rx?: number;
+  className?: string;
+  containerClassName?: string;
+  style?: CSSProperties;
 }
 
 export const MovingBorder = ({

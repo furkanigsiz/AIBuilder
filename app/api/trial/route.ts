@@ -79,10 +79,10 @@ export async function POST(req: Request) {
       trial_end_date: trialEndDate
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Trial API Hatası:', error);
     return NextResponse.json(
-      { error: error.message || 'Bir hata oluştu' },
+      { error: error instanceof Error ? error.message : 'Bir hata oluştu' },
       { status: 500 }
     );
   }
