@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import confetti from "canvas-confetti";
+import * as confetti from "canvas-confetti";
 import { CheckCircle2 } from "lucide-react";
 
 interface TrialSuccessModalProps {
@@ -14,7 +14,10 @@ export function TrialSuccessModal({ onClose }: TrialSuccessModalProps) {
 
   useEffect(() => {
     // Konfeti efekti
-    confetti({
+    confetti.create(undefined, {
+      resize: true,
+      useWorker: true,
+    })({
       particleCount: 100,
       spread: 70,
       origin: { y: 0.6 }
