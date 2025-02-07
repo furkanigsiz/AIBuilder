@@ -1,4 +1,3 @@
-import NumberFlow from '@number-flow/react'
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -71,6 +70,14 @@ export function PricingInteraction ({
     router.push('/kaynaklar');
     // Sayfayı yenile
     window.location.reload();
+  };
+
+  // Fiyat formatı için yardımcı fonksiyon
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('tr-TR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(price);
   };
 
   return (
@@ -151,7 +158,7 @@ export function PricingInteraction ({
                   <p className="font-semibold text-2xl text-white">Gelişmiş Eğitim</p>
                   <p className="text-neutral-300 mt-1 flex items-center">
                     <span className="text-white font-medium flex items-center">
-                      ₺<NumberFlow value={proMonth} className="text-white font-medium" />
+                      ₺{formatPrice(proMonth)}
                     </span>
                     /ay
                   </p>
@@ -204,7 +211,7 @@ export function PricingInteraction ({
                   </div>
                   <p className="text-neutral-300 mt-1 flex items-center">
                     <span className="text-white font-medium flex items-center">
-                      ₺<NumberFlow value={proAnnual} className="text-white font-medium" />
+                      ₺{formatPrice(proAnnual)}
                     </span>
                     /ay
                   </p>
