@@ -1,16 +1,42 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/moving-border";
 import { PricingDemo } from "@/components/ui/pricing-demo";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { UserMenu } from "@/components/ui/user-menu";
+import { supabase } from "@/lib/supabase";
 
 export default function Egitimler() {
   const [showPricing, setShowPricing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  const checkUser = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      setIsAuthenticated(!!user);
+    } catch (error) {
+      console.error('Kullanıcı kontrolü hatası:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black/90 flex items-center justify-center">
+        <div className="text-white">Yükleniyor...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black/90">
@@ -198,41 +224,56 @@ export default function Egitimler() {
               AI Dünyasına Adım Atmaya Hazır mısınız?
             </h2>
             <p className="text-xl text-neutral-300">
-              7 günlük ücretsiz deneme ile AI Builder'ın sunduğu fırsatları keşfedin.
+              {isAuthenticated 
+                ? "7 günlük ücretsiz deneme ile AI Builder'ın sunduğu fırsatları keşfedin."
+                : "Hemen giriş yapın ve AI Builder'ın sunduğu fırsatları keşfedin."
+              }
             </p>
             <div className="flex flex-col md:flex-row gap-4 justify-center">
-              <Button
-                onClick={() => setShowPricing(true)}
-                className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-none"
-                containerClassName="w-full md:w-[250px]"
-              >
-                Hemen Başla
-              </Button>
+              {isAuthenticated ? (
+                <Button
+                  onClick={() => setShowPricing(true)}
+                  className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-none"
+                  containerClassName="w-full md:w-[250px]"
+                >
+                  Hemen Başla
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => router.push('/auth')}
+                  className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-none"
+                  containerClassName="w-full md:w-[250px]"
+                >
+                  Giriş Yap
+                </Button>
+              )}
             </div>
           </motion.div>
         </div>
       </div>
 
       {/* Fiyatlandırma Modal */}
-      {showPricing && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setShowPricing(false)}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center"
-        >
+      <AnimatePresence>
+        {showPricing && (
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            onClick={(e) => e.stopPropagation()}
-            className="relative"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowPricing(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center"
           >
-            <PricingDemo />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative"
+            >
+              <PricingDemo />
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 } 

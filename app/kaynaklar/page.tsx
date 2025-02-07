@@ -16,6 +16,7 @@ export default function Kaynaklar() {
   const [hasAccess, setHasAccess] = useState(false);
   const [isTrialActive, setIsTrialActive] = useState(false);
   const [trialDaysLeft, setTrialDaysLeft] = useState(0);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     checkAccess();
@@ -24,6 +25,8 @@ export default function Kaynaklar() {
   const checkAccess = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
+      
+      setIsAuthenticated(!!user);
       
       if (!user) {
         setLoading(false);
@@ -101,16 +104,29 @@ export default function Kaynaklar() {
                 Premium İçerik
               </h1>
               <p className="text-xl text-neutral-300 max-w-xl mx-auto">
-                Bu içeriğe erişmek için premium üyelik gerekiyor. AI Builder'ın sunduğu tüm eğitimlere erişim için hemen üye olun.
+                {isAuthenticated 
+                  ? "7 günlük ücretsiz deneme ile AI Builder'ın sunduğu tüm eğitimlere erişebilirsiniz."
+                  : "Bu içeriğe erişmek için giriş yapmanız gerekiyor. AI Builder'ın sunduğu tüm eğitimlere erişim için hemen üye olun."
+                }
               </p>
               <div className="flex flex-col items-center gap-4">
-                <Button
-                  onClick={() => router.push('/auth')}
-                  className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-none"
-                  containerClassName="w-full md:w-[250px]"
-                >
-                  Giriş Yap
-                </Button>
+                {isAuthenticated ? (
+                  <Button
+                    onClick={() => setShowPricing(true)}
+                    className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-none"
+                    containerClassName="w-full md:w-[250px]"
+                  >
+                    Denemeyi Başlat
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => router.push('/auth')}
+                    className="bg-gradient-to-r from-blue-500 to-purple-500 text-white border-none"
+                    containerClassName="w-full md:w-[250px]"
+                  >
+                    Giriş Yap
+                  </Button>
+                )}
                 <button
                   onClick={() => router.push('/')}
                   className="text-neutral-400 hover:text-white transition-colors text-sm"
