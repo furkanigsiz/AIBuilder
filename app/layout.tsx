@@ -9,6 +9,32 @@ export const metadata: Metadata = {
   title: "AI Builder - Yapay Zeka ile Web Geliştirme",
   description: "Yapay zeka araçlarını kullanarak kod yazmadan web siteleri ve uygulamalar geliştirmeyi öğrenin. Modern AI framework'leri ile projelerinizi hayata geçirin.",
   keywords: "yapay zeka, web geliştirme, AI framework, no-code, low-code, eğitim, öğretim",
+  icons: {
+    icon: [
+      {
+        url: "/favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+      {
+        url: "/favicon-16x16.png",
+        sizes: "16x16",
+        type: "image/png",
+      }
+    ],
+    apple: [
+      {
+        url: "/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+  },
+  manifest: "/manifest.json",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "#0A0A0A" },
+  ],
 };
 
 export default function RootLayout({
