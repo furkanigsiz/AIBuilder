@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import * as confetti from "canvas-confetti";
 import { CheckCircle2 } from "lucide-react";
 
 interface TrialSuccessModalProps {
@@ -13,18 +12,6 @@ export function TrialSuccessModal({ onClose }: TrialSuccessModalProps) {
   const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {
-    // Konfeti efekti
-    const myConfetti = confetti.create(undefined, {
-      resize: true,
-      useWorker: true,
-    });
-
-    myConfetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 }
-    });
-
     // Her saniye geri sayımı güncelle
     const countdownInterval = setInterval(() => {
       setCountdown((prev) => prev - 1);
